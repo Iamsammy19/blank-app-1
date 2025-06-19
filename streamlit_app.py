@@ -3,97 +3,127 @@ import time
 import random
 from datetime import datetime
 
-# ======================
-# NIGERIAN THREAT DATABASE
-# ======================
+# Nigerian threat database
 THREATS = {
-    # Ransomware targeting Nigerian businesses
-    "naija_ransomware": {
-        "extensions": [".lagoslock", ".nairacrypt", ".yahoomoney"],
-        "payment_wallets": [
-            "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
-            "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq"
+    "email_scams": {
+        "subjects": [
+            "Urgent: Your BVN has been blocked",
+            "Congratulations! You won 500,000 Naira",
+            "Access Bank Security Alert"
+        ],
+        "senders": [
+            "security@accessbank-update.com",
+            "noreply@gtbank-alerts.com",
+            "support@firstbank-verify.org"
         ]
     },
-    
-    # Advanced Yahoo Boy patterns (Pidgin + English)
-    "scam_patterns": {
-        "pidgin": [
-            "my pikin don sick", 
-            "wire me small money",
-            "na urgent matter"
+    "social_media": {
+        "whatsapp": [
+            "Hi dear, I need your account number",
+            "Click this link to claim your prize",
+            "Your SIM card will be blocked today"
         ],
-        "english": [
-            "Your BVN has been blocked",
-            "Click to claim your airtime reward",
-            "Dear Valued Customer"
+        "instagram": [
+            "Double-tap to get 50k followers",
+            "Account verification required",
+            "You've been tagged in a fake giveaway"
         ]
-    }
+    },
+    "sms_scams": [
+        "Your Zenith account has been limited",
+        "MTN: You won 10GB data. Click here",
+        "GLO: Your line will be disconnected"
+    ]
 }
 
-# ======================
-# UNIQUE FEATURES
-# ======================
-def simulate_device_scan():
-    """Generates realistic scan results with Nigerian context"""
-    findings = []
-    
-    # 60% chance of finding common Nigerian threats
-    if random.random() > 0.4:
-        findings.append(("Yahoo Boy Toolkit", "Advanced 419 software"))
-        
-    if random.random() > 0.7:
-        ext = random.choice(THREATS['naija_ransomware']['extensions'])  # Fixed parenthesis
-        wallet = random.choice(THREATS['naija_ransomware']['payment_wallets'])
-        findings.append((f"Ransomware {ext}", f"Demanding payment to {wallet}"))
-    
-    # Always find at least one "educational" threat
-    educational_findings = [
-        ("Old WhatsApp Media", "Potential scam images/videos"),
-        ("Unsecured WiFi Networks", "3 vulnerable networks nearby")
-    ]
-    findings.append(random.choice(educational_findings))
-    
-    return findings
+# Simulated access functions
+def scan_emails():
+    st.write("📧 Scanning emails...")
+    time.sleep(2)
+    scam_emails = []
+    if random.random() > 0.5:
+        scam_emails.append((
+            random.choice(THREATS["email_scams"]["senders"]),
+            random.choice(THREATS["email_scams"]["subjects"])
+        )
+    return scam_emails
 
-# ======================
-# STREAMLIT UI
-# ======================
+def scan_social_media():
+    st.write("📱 Checking social media...")
+    time.sleep(3)
+    threats = []
+    if random.random() > 0.4:
+        threats.append((
+            "WhatsApp", 
+            random.choice(THREATS["social_media"]["whatsapp"])
+        ))
+    if random.random() > 0.4:
+        threats.append((
+            "Instagram", 
+            random.choice(THREATS["social_media"]["instagram"])
+        ))
+    return threats
+
+def scan_sms():
+    st.write("💬 Checking messages...")
+    time.sleep(1.5)
+    scam_sms = []
+    if random.random() > 0.6:
+        scam_sms.append(random.choice(THREATS["sms_scams"]))
+    return scam_sms
+
+# Streamlit UI
 st.set_page_config(
     page_title="NaijaShield Pro",
     layout="centered",
-    initial_sidebar_state="collapsed",
-    page_icon="🦅"
+    initial_sidebar_state="collapsed"
 )
 
-st.title("🦅 NaijaShield Pro")
-st.markdown("Nigeria's Most Advanced Anti-Fraud Protection")
+st.title("📱 NaijaShield Pro")
+st.markdown("**Full device protection for Nigerian users**")
 
-if st.button("🔥 RUN FULL PHONE SCAN"):
-    with st.status("Scanning your device for Naija threats...", expanded=True) as status:
-        time.sleep(1.5)
-        st.write("🔍 Checking for Yahoo Boy toolkits...")
-        time.sleep(2)
-        st.write("📱 Analyzing WhatsApp messages...")
-        time.sleep(1)
-        st.write("🏦 Verifying banking apps...")
+if st.button("🔍 SCAN MY MESSAGES & SOCIALS", type="primary"):
+    with st.status("Scanning your personal communications...", expanded=True) as status:
+        emails = scan_emails()
+        social = scan_social_media()
+        sms = scan_sms()
         status.update(label="Scan Complete!", state="complete")
     
-    findings = simulate_device_scan()
+    # Display results
+    st.subheader("Threat Report")
     
-    st.success(f"""
-    **Scan Report**  
-    - Threats Found: {len(findings)}  
-    - Top Threat: {findings[0][0] if findings else 'None'}  
-    """)
+    if emails:
+        st.error("**Email Threats**")
+        for sender, subject in emails:
+            st.write(f"- From: {sender}")
+            st.write(f"  Subject: {subject}")
     
-    with st.expander("View all threats"):
-        for threat, desc in findings:
-            st.write(f"- **{threat}**: {desc}")
+    if social:
+        st.error("**Social Media Threats**")
+        for platform, message in social:
+            st.write(f"- {platform}: {message}")
+    
+    if sms:
+        st.error("**SMS Scams**")
+        for msg in sms:
+            st.write(f"- {msg}")
+    
+    if not emails and not social and not sms:
+        st.success("✅ No threats found in your communications")
 
-# Emergency contacts
+# What a real app would need
+st.markdown("---")
+st.markdown("""
+**For true message access**:  
+This demo simulates scanning. A real app would require:
+- Android: `READ_SMS` and `READ_CONTACTS` permissions
+- iOS: Restricted entitlements
+- Email: IMAP access with user credentials
+""")
+
+# Nigerian emergency contacts
 st.markdown("""
 **Emergency Options**:  
-📞 *322# - Instant threat blocking  
-📞 08006322222 - EFCC Cybercrime Hotline  
+📞 *322# - NCC Scam Reporting  
+📞 08006322222 - EFCC Cybercrime Unit  
 """)
