@@ -58,8 +58,8 @@ def simulate_device_scan():
         findings.append(("Yahoo Boy Toolkit", "Advanced 419 software"))
         
     if random.random() > 0.7:
-        findings.append((f"Ransomware ({random.choice(THREATS['naija_ransomware']['extensions']})", 
-                        f"Demanding payment to {random.choice(THREATS['naija_ransomware']['payment_wallets'])}"))
+        findings.append((f"Ransomware {random.choice(THREATS['naija_ransomware']['extensions']}", 
+                       f"Demanding payment to {random.choice(THREATS['naija_ransomware']['payment_wallets'])}"))
     
     # Always find at least one "educational" threat
     educational_findings = [
